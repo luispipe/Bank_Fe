@@ -1,31 +1,24 @@
 <template>
     <div class="signUp_user">
         <div class="container_signUp_user">
-            <h2> Registrarse</h2>
-            <form v-on:submit.prevent="proccessSignUp">
+            <form v-on:submit.prevent="processSignUp">
                 <label id="user_username"> Username:
                     <input type="text" v-model="user.username" placeholder="Username" required>
                 </label>
-                <br/>
                 <label id="user_password"> Password:
                     <input type="password" v-model="user.password" placeholder="Password" required>
                 </label>
-                <br/>
                 <label id="user_name"> Name:
                     <input type="text" v-model="user.name" placeholder="Name" required>
                 </label>
-                <br/>
                 <label id="user_email"> E-mail:
-                    <input type="email" v-model="user.email" placeholder="E-Mail" required>
+                    <input type="email" v-model="user.email" placeholder="E-mail" required>
                 </label>
-                <br/>
                 <label id="user_balance"> Balance:
-                    <input type="number" v-model="user.account.balance" placeholder="Initial Balance" required>
+                    <input type="number" v-model="user.account.balance" placeholder="Balance" required>
                 </label>
-                <br/>
                 <button type="submit">Registrarse</button>
-  
-            </form> 
+            </form>    
         </div>
     </div>
 </template>
@@ -40,41 +33,38 @@ export default {
                 password: "",
                 name: "",
                 email: "",
-                account:{
-                    lastChangeDate: (new Date()).toJSON.toString(),
-                    balance: 0,
+                account: {
+                    lastChangeDate: (new Date()).toJSON().toString(),
+                    balance: "",
                     isActive: true
-                }
+                }  
             }
-
         }
     },
 
-    methods: {
-        proccessSignUp:function(){
-            axios.post("https://bank-be-g59-60.herokuapp.com/user/",
-            this.user).then((result)=>{
+    methods:{
+        processSignUp:function(){
+            axios.post("https://bank-be-g52.herokuapp.com/user/", this.user,{headers:{}})
+            .then((result)=>{
+                alert("Registro Exitoso");
                 let dataSignUp={
                     username: this.user.username,
                     token_access: result.data.access,
-                    token_refresh: result.data.refresh,
+                    token_refresh: result.data.refresh
                 }
-                this.$emit('completedSignUp',dataSignUp)
-
+                this.$emit('completeSignUp',dataSignUp)
             }).catch((error)=>{
                 console.log(error)
                 alert("Error: fallo el registro");
-            });
 
-
+            })
         }
     }
-
 }
 </script>
 
 <style>
-    .signUp_user{
+.signUp_user{
     margin: 0;
     padding: 0%;
     height: 100%;
@@ -88,7 +78,7 @@ export default {
     border: 3px solid #283747;
     border-radius: 10px;
     width: 25%;
-    height: 60%;
+    height: 85%;
     display: flex;
     flex-direction: column;
     justify-content: center;

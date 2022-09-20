@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data:function(){
         return{
@@ -32,7 +33,8 @@ export default {
     methods:{
         processLogInUser: function(){
             axios.post("https://bank-be-g52.herokuapp.com/login/",
-            this.user).then((result)=>{
+            this.user, {header:{}})
+            .then((result)=>{
                  let dataLogIn={
                     username: this.username,
                     token_access: result.data.access,
