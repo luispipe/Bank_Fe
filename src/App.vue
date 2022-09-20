@@ -39,7 +39,7 @@ export default({
     loadLogIn: function(){
         this.$router.push({name:"logIn"})
     },
-    loadSignIn: function(){
+    loadSignUp: function(){
         this.$router.push({name:"signUp"})
     },
 
