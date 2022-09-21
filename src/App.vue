@@ -3,9 +3,9 @@
     <div class="header">
         <h1>Banco Misión TIC G59</h1>
         <nav>
-            <button v-if="is_auth"> Inicion </button>
+            <button v-if="is_auth" v-on:click="loadHome" > Inicio </button>
             <button v-if="is_auth"> Cuenta </button>
-            <button v-if="is_auth"> Cerrar Sesión </button>
+            <button v-if="is_auth" v-on:click="logOut"> Cerrar Sesión </button>
             <button v-if="!is_auth" v-on:click="loadLogIn"> Iniciar Sesión </button>
             <button v-if="!is_auth" v-on:click="loadSignUp"> Registrarse </button> 
         </nav>
@@ -15,6 +15,7 @@
     <router-view 
       v-on:completedLogIn= "completedLogIn"
       v-on:completedSignUp= "completedSignUp"
+      v-on:logOut="logOut"
       ></router-view>
   </div>
   <div class="footer">
@@ -33,8 +34,12 @@ export default({
 
   methods:{
     veryAuth: function(){
+      this.is_auth= localStorage.getItem("isAuth") || false;
+
       if(this.is_auth== false)
-        this.$router.push({name:"logIn"})
+        this.$router.push({name:"logIn"});
+      else
+        this.$router.push({name:"home"});
     },  
     loadLogIn: function(){
         this.$router.push({name:"logIn"})
@@ -43,12 +48,27 @@ export default({
         this.$router.push({name:"signUp"})
     },
 
-    completeLogIn: function(data){
-
+    completedLogIn: function(data){
+        
+        localStorage.setItem("isAuth", true);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("token_access", data.token_acess);
+        localStorage.setItem("token_refresh", data.token_refresh);
+        alert("Auntentificación Exitoda");
+        this.veryAuth();
     },
 
-    completeSignUp: function(data){
-
+    completedSignUp: function(data){
+        alert("Registro Exitoso");
+        this.completedLogIn(data);
+    },
+    logOut:function(){
+      localStorage.clear();
+      alert("Sesion cerrada");
+      this.veryAuth();
+    },
+    loadHome:function(){
+      this.$router.push({name:"home"});
     }
 
   },

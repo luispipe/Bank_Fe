@@ -52,7 +52,7 @@ export default {
                     token_access: result.data.access,
                     token_refresh: result.data.refresh
                 }
-                this.$emit('completeSignUp',dataSignUp)
+                this.$emit('completedSignUp',dataSignUp)
             }).catch((error)=>{
                 console.log(error)
                 alert("Error: fallo el registro");

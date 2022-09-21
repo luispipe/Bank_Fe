@@ -36,7 +36,7 @@ export default {
             this.user, {header:{}})
             .then((result)=>{
                  let dataLogIn={
-                    username: this.username,
+                    username: this.user.username,
                     token_access: result.data.access,
                     token_refresh: result.data.refresh,
                  } 
