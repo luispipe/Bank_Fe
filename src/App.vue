@@ -4,7 +4,7 @@
         <h1>Banco Misión TIC G59</h1>
         <nav>
             <button v-if="is_auth" v-on:click="loadHome" > Inicio </button>
-            <button v-if="is_auth"> Cuenta </button>
+            <button v-if="is_auth" v-on:click="loadAccount"> Cuenta </button>
             <button v-if="is_auth" v-on:click="logOut"> Cerrar Sesión </button>
             <button v-if="!is_auth" v-on:click="loadLogIn"> Iniciar Sesión </button>
             <button v-if="!is_auth" v-on:click="loadSignUp"> Registrarse </button> 
@@ -52,7 +52,7 @@ export default({
         
         localStorage.setItem("isAuth", true);
         localStorage.setItem("username", data.username);
-        localStorage.setItem("token_access", data.token_acess);
+        localStorage.setItem("token_access", data.token_access);
         localStorage.setItem("token_refresh", data.token_refresh);
         alert("Auntentificación Exitoda");
         this.veryAuth();
@@ -69,6 +69,9 @@ export default({
     },
     loadHome:function(){
       this.$router.push({name:"home"});
+    },
+    loadAccount:function(){
+      this.$router.push({name:"account"});
     }
 
   },

@@ -35,6 +35,7 @@ export default {
             axios.post("https://bank-be-g52.herokuapp.com/login/",
             this.user, {header:{}})
             .then((result)=>{
+                console.log(result);
                  let dataLogIn={
                     username: this.user.username,
                     token_access: result.data.access,
