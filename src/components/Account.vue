@@ -1,65 +1,57 @@
 <template>
   <div v-if="loaded" class="information">
-        <h1> información de su cuenta</h1>
-        <h2> Nombre: <span> {{name}}</span></h2>
-        <h2> Saldo: <span> {{balance}}</span></h2>
-        <h2> E-mail: <span> {{email}}</span></h2>
+    <h1>Información de tú cuenta</h1>
+    <h2> Nombre: <span>{{name}}</span></h2>
+    <h2> Saldo: <span>{{balance}} COP</span></h2>
+    <h2> E-mail: <span>{{email}}</span></h2>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 export default {
     data:function(){
         return{
-            name:"",
-            email:"",
-            balance: "",
-            loaded: false,
+            name: "",
+            email: "",
+            balance:"",
+            loaded: false, 
         }
-
     },
-
     methods:{
         getData: async function(){
-            if(localStorage.getItem("token_access")=== null || localStorage.getItem("token_refresh")=== null){
+            if(localStorage.getItem("token_access")===null || localStorage.getItem("token_refresh")===null){
                 this.$emit('logOut');
                 return;
-            } 
+            }
             await this.verifyToken();
-            let token = localStorage.getItem("token_access");
+            let token= localStorage.getItem("token_access");
             let userId= jwt_decode(token).user_id.toString();
-            console.log(userId);    
-            axios.get(`https://bank-be-g52.herokuapp.com/user/${userId}`, {headers: {'Authorization':`Bearer ${token}`}})
+
+            axios.get(`https://bank-be-g52.herokuapp.com/user/${userId}/`, {headers:{'Authorization':`Bearer ${token}`}})
             .then((result)=>{
-               
-                console.log(result);
                 this.name= result.data.name;
                 this.email= result.data.email;
                 this.balance= result.data.account.balance;
                 this.loaded= true;
             }).catch((error)=>{
-                alert("Prueba");
                 console.log(error);
                 this.$emit('logOut');
             });
         },
-
-        verifyToken: function(){
-            return axios.post("https://bank-be-g52.herokuapp.com/refresh/", {refresh: localStorage.getItem("token_refresh")},{headers:{}})
+        verifyToken:function(){
+            return axios.post("https://bank-be-g52.herokuapp.com/refresh/",{refresh: localStorage.getItem("token_refresh")},{headers:{}})
             .then((result)=>{
-                localStorage.setItem("token_access", result.data.access);
-
-            }).catch((error)=>{
-                console.log(error);
-                this,this.$emit('logOut')
-            })
-        }           
-    },
-        created: async function(){
-            this.getData();
+                localStorage.setItem("token_access",result.data.access);
+            }).catch(()=>{
+                this.$emit('logOut');
+            });
         }
+    },
+    created: async function(){
+        this.getData();
+    } 
 }
 </script>
 
